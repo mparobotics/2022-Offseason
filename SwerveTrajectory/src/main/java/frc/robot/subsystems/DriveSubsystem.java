@@ -10,13 +10,16 @@ import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -54,23 +57,19 @@ public class DriveSubsystem extends SubsystemBase {
           Math.hypot(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
 
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-            // Front left
-            new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            // Front right
-            new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            // Back left
-            new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
-            // Back right
-            new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
-    );        
+  private final SwerveDriveKinematics m_kinematics = Constants.K_DRIVE_KINEMATICS;
 
     private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+
+    SwerveDriveOdometry m_odometry =
+    new SwerveDriveOdometry(Constants.K_DRIVE_KINEMATICS, m_navx.getRotation2d());
+
 
     private final SwerveModule m_frontLeftModule;
     private final SwerveModule m_frontRightModule;
     private final SwerveModule m_backLeftModule;
     private final SwerveModule m_backRightModule;
+
 
     private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   /** Creates a new DriveSubsystem. */
@@ -157,10 +156,31 @@ m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
     // This method will be called once per scheduler run
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+    m_odometry.update(
+      new Rotation2d(getHeading()),
+    m_frontLeftModule.getState(),
+    m_backLeftModule.getState(),
+    m_frontRightModule.getState(),
+    m_backRightModule.getState()););
+
 
     m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
     m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
   }
+
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public double getHeading() {
+    return m_navx.getRotation2d().getDegrees();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(pose, m_navx.getRotation2d());
+  }
+
 }
