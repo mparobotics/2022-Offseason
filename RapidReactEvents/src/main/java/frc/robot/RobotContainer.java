@@ -121,7 +121,7 @@ public class RobotContainer {
   
     driveSub.setDefaultCommand(new ArcadeDriveClassic(driveSub,
                                () -> xbox.getLeftY(),
-                               () -> xbox.getRightX()*.7));
+                               () -> xbox.getLeftX()*.7));
                         
     // Configure the button bindings
     //shooterSub.setDefaultCommand(new ShootBall(shooterSub, shooterStick.getY()));

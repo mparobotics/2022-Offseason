@@ -59,7 +59,7 @@ public class FlyWheel_Velocity extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //SmartDashboard.putNumber("ShooterSpeed", _talon.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("ShooterSpeed", _talon.getSelectedSensorVelocity());
   }
 
   public  void my_Flywheel_Velocity(double setpoint){
@@ -70,6 +70,7 @@ public class FlyWheel_Velocity extends SubsystemBase {
 			 * velocity setpoint is in units/100ms
 			 */
     //double targetVelocity_UnitsPer100ms = setpoint * 6200.0 * 2048.0 / 600.0;
+
     speedINeed = setpoint;
     double targetVelocity_UnitsPer100ms = setpoint; //2000 * 2048 / 600
 			/* 2000 RPM in either direction */

@@ -152,6 +152,9 @@ m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
     m_chassisSpeeds = chassisSpeeds;
   }
 
+  public double getEncoder(){
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
