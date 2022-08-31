@@ -71,7 +71,7 @@ public class FlyWheelVelocityRun extends CommandBase {
       speedToGet = 3900;
     }
 
-    m_flywWheel_Velocity.my_Flywheel_Velocity(4000);
+    m_flywWheel_Velocity.my_Flywheel_Velocity(speedToGet);
   }
 
   
