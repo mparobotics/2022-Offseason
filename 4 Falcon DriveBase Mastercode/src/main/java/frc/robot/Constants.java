@@ -13,11 +13,11 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public final static class DriveConstants{
-        public static final int FALCON_FR_ID = 47; //ID of front right falcon
-        public static final int FALCON_FL_ID = 48; // ID of front left falcon
-        public static final int FALCON_BR_ID = 46; // ID of back right falcon
-        public static final int FALCON_BL_ID = 49; // ID of back left falcon
+    public final class DriveConstants{
+        public final static int FALCON_FR_ID = 47; //ID of front right falcon
+        public final static int FALCON_FL_ID = 48; // ID of front left falcon
+        public final static int FALCON_BR_ID = 46; // ID of back right falcon
+        public final static int FALCON_BL_ID = 49; // ID of back left falcon
         /**
          * The DriveConstants class is used to define all of the constants we use for driving. 
          * These include the IDs of the motors, conversion rates from tics to feet, etc.

@@ -158,6 +158,8 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     if (RobotContainer.box.getRawButton(5) == true){
     CommandScheduler.getInstance().run();}
+    //else{CommandScheduler.getInstance().cancelAll();} //to test
+    
     //SmartDashboard.putData("Auto Chooser", autoChooser);
         /**
      * The method GetColor() returns a normalized color value from the sensor and can be

@@ -6,11 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.commands.ClawOpen;
+import frc.robot.commands.TankDrive;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,17 +23,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSub = new DriveSubsystem();
-  
+  private final IntakeSubsystem m_intakeSub = new IntakeSubsystem();
 
+  public XboxController xbox = new XboxController(Constants.XBOX_ID);
 
-  public XboxController xbox = new XboxController(OIConstants.XBOX_ID);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
-    m_driveSub.setDefaultCommand(new ArcadeDrive(m_driveSub, () -> xbox.getLeftY(), () -> xbox.getRightX()));
+    m_driveSub.setDefaultCommand(new TankDrive(m_driveSub, () -> xbox.getLeftY(), () -> xbox.getRightY()));
 
   }
 
@@ -42,7 +43,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    new JoystickButton(xbox, Button.kB.value).whenHeld(new ClawOpen(m_intakeSub));
+    new JoystickButton(xbox, Button.kA.value).whenHeld(new ClawOpen(m_intakeSub));
+
   }
 
   /**

@@ -185,6 +185,7 @@ public class RobotContainer {
     //Elevator settings
         //new JoystickButton(helms, Button.kA.value).whenHeld(new Queue(elevatorsub));
         new JoystickButton(helms, Button.kA.value).whenHeld(new Elevator(elevatorsub));
+        new JoystickButton(xbox, Button.kA.value).whenHeld(new Elevator(elevatorsub));
         new JoystickButton(box, 3).whenHeld(new ElevatorOveride(elevatorsub));
         new JoystickButton(helms, Button.kY.value).whenHeld(new ElevatorReverse(elevatorsub));
         new JoystickButton(box, 4).whenHeld(new FlyWheelVelocityRunOveride(flyWheel_Velocity));
