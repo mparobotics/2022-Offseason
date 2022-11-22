@@ -30,7 +30,7 @@ private final IntakeSubsystem m_intakeSubsystem;
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSubsystem.moveClaw(0);
+    m_intakeSubsystem.moveClawBangBang(0);
   }
 
   // Returns true when the command should end.

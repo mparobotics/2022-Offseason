@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ClawClose;
 import frc.robot.commands.ClawOpen;
+import frc.robot.commands.NeoVelocityControlPID;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -44,7 +46,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(xbox, Button.kB.value).whenHeld(new ClawOpen(m_intakeSub));
-    new JoystickButton(xbox, Button.kA.value).whenHeld(new ClawOpen(m_intakeSub));
+    new JoystickButton(xbox, Button.kA.value).whenHeld(new ClawClose(m_intakeSub));
+    new JoystickButton(xbox, Button.kLeftBumper.value).whenHeld(new NeoVelocityControlPID(m_intakeSub));
 
   }
 
