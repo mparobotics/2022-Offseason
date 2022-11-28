@@ -9,7 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TankDrive extends CommandBase {
+public class ArcadeDrive extends CommandBase {
     /** Creates a new TankDrive. */
 
 
@@ -19,7 +19,7 @@ public class TankDrive extends CommandBase {
   
   
 
-  public TankDrive(DriveSubsystem driveSub, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public ArcadeDrive(DriveSubsystem driveSub, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
   
     // Use addRequirements() here to declare subsystem dependencies.
     m_driveSubsystem = driveSub;
@@ -35,7 +35,10 @@ public class TankDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_driveSubsystem.setDriveSpeedArcade(m_xSpeed.getAsDouble(), m_zRotation.getAsDouble());
+  }
+  
 
   // Called once the command ends or is interrupted.
   @Override
