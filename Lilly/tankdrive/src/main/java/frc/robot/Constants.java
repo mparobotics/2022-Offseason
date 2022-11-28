@@ -14,8 +14,10 @@ package frc.robot;
  */
 public final class Constants {
     //motor IDs. Public means acessuble by all files. Final means not going to change. Idk what static means.
-    public final static int MOTOR_FL_ID = 0;
-    public final static int MOTOR_BL_ID = 0;
-    public final static int MOTOR_FR_ID = 0;
-    public final static int MOTOR_BR_ID = 0;
+    public final static int MOTOR_FL_ID = 9;
+    public final static int MOTOR_BL_ID = 3;
+    public final static int MOTOR_FR_ID = 8;
+    public final static int MOTOR_BR_ID = 7;
+
+    public final static int CONTROLLER_PORT = 0;
 }

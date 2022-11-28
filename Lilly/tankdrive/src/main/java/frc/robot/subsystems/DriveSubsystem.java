@@ -41,6 +41,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     // This method will be called once per scheduler run
   }
+  
+  public void setDriveSpeedArcade (double xSpeed, double zRotation){
+    //Speed limmiter 
+    xSpeed = xSpeed * 0.5;
+    zRotation = zRotation * 0.5;
+    //deadband makes small imputs read as 0
+    if (Math.abs(xSpeed) < 0.1){xSpeed = 0;}
+    if (Math.abs(zRotation) < 0.1){zRotation = 0;}
+     
+    differentialDrive.arcadeDrive(xSpeed, zRotation);}
+    
 
   public void setDriveSpeedTank (double leftSpeed, double rightSpeed){
   //Speed limmiter 
@@ -54,5 +65,6 @@ public class DriveSubsystem extends SubsystemBase {
   
     
   }
+  
 
 }
