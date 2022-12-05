@@ -30,6 +30,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double allowedErr = 10;
   int smartMotionSlot = 0;
 
+  public double m_setPoint;
+
   private final CANSparkMax elevatorMotor = new CANSparkMax(Constants.ELEVATORMOTOR_ID, MotorType.kBrushless);
   private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
   private SparkMaxPIDController elevator_pidController = elevatorMotor.getPIDController();
@@ -72,21 +74,25 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
 
+
   public void elevatorVelocityControl (double setPointVel){
-    double m_setPoint = setPointVel;
+    m_setPoint = setPointVel;
     elevator_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kVelocity);
     double processVariable = elevatorEncoder.getVelocity();
-
+    
     SmartDashboard.putNumber("SetPoint", m_setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", elevatorMotor.getAppliedOutput());
   }
 
   public void elevatorMotionControl (double setPointPos){
-    double m_setPoint = setPointPos;
+    m_setPoint = setPointPos;
+    //limit the elevators height so that it's always between the MAX and MIN values
+    m_setPoint = Math.min(Math.max(m_setPoint,Constants.MIN_ELEVATOR_SETPOINT),Constants.MAX_ELEVATOR_SETPOINT);
+    //update the PID controller
     elevator_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kPosition);
     double processVariable = elevatorEncoder.getPosition();
-
+    //display PID values
     SmartDashboard.putNumber("SetPoint", m_setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", elevatorMotor.getAppliedOutput());
