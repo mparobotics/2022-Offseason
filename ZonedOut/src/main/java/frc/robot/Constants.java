@@ -15,32 +15,31 @@ package frc.robot;
 public final class Constants {
 
     //motor positions for each height - picking up rings, low pillar, medium pillar, high pillar
-    public static final double ELEVATORGROUND = 0;//I haven't tested this
-    public static final double ELEVATORLOW = 191;//I haven't tested this
-    public static final double ELEVATORMID = 407;//I haven't tested this
-    public static final double ELEVATORHIGH = 624;//I haven't tested this
+    public static final double ELEVATORGROUND = 0;//placeholder
+    public static final double ELEVATORLOW = 191;//placeholder
+    public static final double ELEVATORMID = 407;//placeholder
+    public static final double ELEVATORHIGH = 624;//placeholder
 
     //limits to prevent the motor from going too high or too low
-    public static final double MAX_ELEVATOR_SETPOINT = 624;//I haven't tested this
-    public static final double MIN_ELEVATOR_SETPOINT = 0;//I haven't tested this
+    public static final double MAX_ELEVATOR_SETPOINT = 624;//placeholder
+    public static final double MIN_ELEVATOR_SETPOINT = 0;//placeholder
     //amount to increment the elevator by when the B or Y buttons are pressed
-    public static final double ELEVATOR_INCREMENT_AMOUNT = 0;
-    
-    
-    public static final int BOX_ID = 2;//I haven't tested this
+    public static final double ELEVATOR_INCREMENT_AMOUNT = 10;
     //the numbers for the elevator hights use a 40:1 gear ratio
 
     //xbox controller
     public static final int CONTROLLER_PORT = 0;
-    //motor IDs
+    //box ID
+    public static final int BOX_ID = 1;
+    //drive motor IDs\
     public static final int MOTOR_FL_ID = 34;
     public static final int MOTOR_BL_ID = 18;
     public static final int MOTOR_FR_ID = 33;
     public static final int MOTOR_BR_ID = 06;
-
+    //elevator motor ID
     public static final int ELEVATORMOTOR_ID = 53;
     //driving speed
-    public static final double DRIVE_SPEED = 1;
-    public static final double TURN_SPEED = 1;
+    public static final double DRIVE_SPEED = 0.5;
+    public static final double TURN_SPEED = 0.5;
 
 }

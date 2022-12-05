@@ -40,7 +40,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_driveSubsystem.setDefaultCommand(new ArcadeDrive(m_driveSubsystem, () -> xbox.getRightX() ,() -> xbox.getLeftY()));
+    m_driveSubsystem.setDefaultCommand(new ArcadeDrive(m_driveSubsystem, () -> -xbox.getRightX() ,() -> -xbox.getLeftY()));
   }
 
   /**
