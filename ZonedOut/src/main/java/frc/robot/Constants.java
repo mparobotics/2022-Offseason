@@ -12,4 +12,11 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+    public static final int ELEVATORMOTOR_ID = 53;//Placeholder
+    public static final int ELEVATORGROUND = 0;//I haven't tested this
+    public static final int ELEVATORLOW = 191;//I haven't tested this
+    public static final int ELEVATORMID = 407;//I haven't tested this
+    public static final int ELEVATORHIGH = 624;//I haven't tested this
+    public static final int BOX_ID = 2;//I haven't tested this
+}//the numbers for the elevator hights use a 40:1 gear ratio

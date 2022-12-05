@@ -5,10 +5,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ElevatorGround;
+import frc.robot.commands.ElevatorHigh;
+import frc.robot.commands.ElevatorLow;
+import frc.robot.commands.ElevatorMid;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,9 +26,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  public static Joystick box = new Joystick(Constants.BOX_ID);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -34,7 +42,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new JoystickButton(box, 0).whenPressed(new ElevatorGround(new ElevatorSubsystem()));
+    new JoystickButton(box, 1).whenPressed(new ElevatorLow(new ElevatorSubsystem()));
+    new JoystickButton(box, 2).whenPressed(new ElevatorMid(new ElevatorSubsystem()));
+    new JoystickButton(box, 3).whenPressed(new ElevatorHigh(new ElevatorSubsystem()));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
