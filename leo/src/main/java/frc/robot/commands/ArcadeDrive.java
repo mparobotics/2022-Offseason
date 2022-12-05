@@ -4,29 +4,35 @@
 
 package frc.robot.commands;
 
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class ClawOpen extends CommandBase {
-  /** Creates a new openClaw. */
-  private final ClawSubsystem m_claw;
-  public ClawOpen(ClawSubsystem clawSub) {
+public class ArcadeDrive extends CommandBase {
+  /** Creates a new TankDrive. */
+  private final DriveSubsystem m_DriveSubsystem;
+  private final DoubleSupplier m_turnSpeed;
+  private final DoubleSupplier m_forwardSpeed;
+  
+  public ArcadeDrive(DriveSubsystem driveSub,DoubleSupplier turnSpeed, DoubleSupplier forwardSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(clawSub);
-    m_claw = clawSub;
-
+    m_DriveSubsystem = driveSub;
+    this.m_turnSpeed = turnSpeed;
+    this.m_forwardSpeed= forwardSpeed;
+    addRequirements(driveSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_claw.setClawPosition(Constants.CLAW_MAX_POSITION);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_DriveSubsystem.setDriveSpeedArcade(m_forwardSpeed.getAsDouble(), m_turnSpeed.getAsDouble());
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -14,16 +14,28 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    //port of the xbox controller
     public static final int CONTROLLER_PORT = 0;
-    public static final int CLAW_MOTOR_ID = 0; //placeholder values
-    
-    public static final double CLAW_OPEN_SPEED  = 0.5; 
-    public static final double CLAW_CLOSE_SPEED = 0.5;
 
-    public static final double CLAW_MAX_POSITION = 1000;
-    public static final double CLAW_MIN_POSITION = -1000;
+    //drive motor IDs
+    public static final int MOTOR_FL_ID = 9;
+    public static final int MOTOR_BL_ID = 3;
+    public static final int MOTOR_FR_ID = 8;
+    public static final int MOTOR_BR_ID = 7;
+    //claw motor ID
+    public static final int CLAW_MOTOR_ID = 53; 
 
     
+   
+
+
+    //placeholders - driving speed of the robot
+    public static final double DRIVE_SPEED = 1;
+    public static final double TURN_SPEED = 1;
+
+    //placeholders - driving speeds during autonomous
+    public static final double AUTO_DRIVE_SPEED = 1;
+    public static final double AUTO_TURN_SPEED = 1;
     
 
 }
