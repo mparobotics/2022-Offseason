@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,6 +15,9 @@ import frc.robot.commands.ElevatorGround;
 import frc.robot.commands.ElevatorHigh;
 import frc.robot.commands.ElevatorLow;
 import frc.robot.commands.ElevatorMid;
+import frc.robot.commands.ElevatorReset;
+
+import frc.robot.commands.OverrideElevatorMax;
 import frc.robot.commands.lowerElevator;
 import frc.robot.commands.raiseElevator;
 import frc.robot.subsystems.DriveSubsystem;
@@ -32,15 +37,20 @@ public class RobotContainer {
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
 
-
+  
   public static Joystick box = new Joystick(Constants.BOX_ID);
 
   public static XboxController xbox = new XboxController(Constants.CONTROLLER_PORT);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_driveSubsystem.setDefaultCommand(new ArcadeDrive(m_driveSubsystem, () -> -xbox.getRightX() ,() -> -xbox.getLeftY()));
+    //arcade drive
+    m_driveSubsystem.setDefaultCommand(new ArcadeDrive(m_driveSubsystem, () -> xbox.getRightX() ,() -> -xbox.getLeftY()));
+    
+    
+    
   }
 
   /**
@@ -50,15 +60,33 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //buttons for moving the elevator to each of the four positions
-    new JoystickButton(box, 0).whenPressed(new ElevatorGround(m_elevatorSubsystem));
-    new JoystickButton(box, 1).whenPressed(new ElevatorLow(m_elevatorSubsystem));
-    new JoystickButton(box, 2).whenPressed(new ElevatorMid(m_elevatorSubsystem));
-    new JoystickButton(box, 3).whenPressed(new ElevatorHigh(m_elevatorSubsystem));
+    if(Constants.ELEVATOR_IS_PID){
+      //buttons to control the PID version of the elevator
 
-    //raise elevator with Y button and lower with B button
-    new JoystickButton(xbox, Button.kY.value).whenPressed(new raiseElevator(m_elevatorSubsystem));
-    new JoystickButton(xbox, Button.kB.value).whenPressed(new lowerElevator(m_elevatorSubsystem));
+      //buttons for moving the elevator to each of the four positions
+      new JoystickButton(box, 0).whenPressed(new ElevatorGround(m_elevatorSubsystem));
+      new JoystickButton(box, 1).whenPressed(new ElevatorLow(m_elevatorSubsystem));
+      new JoystickButton(box, 2).whenPressed(new ElevatorMid(m_elevatorSubsystem));
+      new JoystickButton(box, 3).whenPressed(new ElevatorHigh(m_elevatorSubsystem));
+
+      //raise elevator with Y button and lower with B button
+      new JoystickButton(xbox, Button.kY.value).whenPressed(new raiseElevator(m_elevatorSubsystem));
+      new JoystickButton(xbox, Button.kB.value).whenPressed(new lowerElevator(m_elevatorSubsystem));
+    }
+    else{
+      //buttons to control the not PID version of the elevator
+      
+      //button 1 raises the elevator
+      new JoystickButton(box, 1).whenHeld(new raiseElevator(m_elevatorSubsystem));
+      //button 3 lowers the elevator
+      new JoystickButton(box, 3).whenHeld(new lowerElevator(m_elevatorSubsystem));
+      //button 2 raises the elevator at a slower speed and overrides the maximum position
+      new JoystickButton(box, 2).whenHeld(new OverrideElevatorMax(m_elevatorSubsystem));
+      //button 4 lowers the elevator at a slower speed and overrides the minimum position
+      new JoystickButton(box, 4).whenHeld(new OverrideElevatorMax(m_elevatorSubsystem));
+      //button 5 resets the elevator's encoder to 0 rotations
+      new JoystickButton(box, 5).whenHeld(new ElevatorReset(m_elevatorSubsystem));
+    }
   }
 
   /**

@@ -10,7 +10,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorGround extends CommandBase {
   private final ElevatorSubsystem m_elevatorSubsystem;
-  /** Creates a new ClawOpen. */
+  /** Command to set the elevator to its bottom position. Only used with PID Controller */
   public ElevatorGround(ElevatorSubsystem elevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_elevatorSubsystem = elevatorSubsystem;

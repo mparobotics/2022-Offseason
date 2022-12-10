@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.InvertType;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+//import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +21,10 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_TalonSRX motorBL = new WPI_TalonSRX(Constants.MOTOR_BL_ID);
   private final WPI_TalonSRX motorFR = new WPI_TalonSRX(Constants.MOTOR_FR_ID);
   private final WPI_TalonSRX motorBR = new WPI_TalonSRX(Constants.MOTOR_BR_ID);
-
+  /*
+  private final CANCoder enocderL = new CANCoder(Constants.ENCODER_L_ID);
+  private final CANCoder enocderR = new CANCoder(Constants.ENCODER_R_ID);
+  */
   
   DifferentialDrive differentialDrive = new DifferentialDrive(motorFL,motorFR);
 
@@ -34,6 +37,12 @@ public class DriveSubsystem extends SubsystemBase {
     //set following motors
     motorBL.setInverted(InvertType.FollowMaster);
     motorBR.setInverted(InvertType.FollowMaster);
+
+    motorFL.configOpenloopRamp(0.4);
+    motorFR.configOpenloopRamp(0.4);
+    motorBL.configOpenloopRamp(0.4);
+    motorBR.configOpenloopRamp(0.4);
+
 
   
   }
@@ -53,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
     forwardSpeed *= Constants.DRIVE_SPEED;
     turnSpeed *= Constants.TURN_SPEED;
     
-    differentialDrive.arcadeDrive(forwardSpeed, -turnSpeed);
+    differentialDrive.arcadeDrive(forwardSpeed, turnSpeed);
   }
   @Override
   public void periodic() {

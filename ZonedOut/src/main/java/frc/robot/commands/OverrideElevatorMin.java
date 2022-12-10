@@ -8,13 +8,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevatorHigh extends CommandBase {
-  private final ElevatorSubsystem m_elevatorSubsystem;
-   /** Command to move the elevator to the highest height. Only used with the PID Controller */
-  public ElevatorHigh(ElevatorSubsystem elevatorSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_elevatorSubsystem = elevatorSubsystem;
-    addRequirements(elevatorSubsystem);
+public class OverrideElevatorMin extends CommandBase {
+  private final ElevatorSubsystem m_ElevatorSubsystem;
+  /** Command to continue moving the elevator beyond the minimum setpoint (at a slower speed). */
+  public OverrideElevatorMin(ElevatorSubsystem elevSub) {
+    m_ElevatorSubsystem = elevSub;
+    addRequirements(elevSub);
   }
 
   // Called when the command is initially scheduled.
@@ -24,12 +23,19 @@ public class ElevatorHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  m_elevatorSubsystem.elevatorMotionControl(Constants.ELEVATORHIGH);
+    //disable minimum height limit
+    m_ElevatorSubsystem.overrideMin = true;
+    //move at a slower speed so we don't break anything
+    m_ElevatorSubsystem.setElevatorSpeed(-Constants.ELEVATOR_OVERRIDE_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    //stop the motors when the button is released
+    m_ElevatorSubsystem.overrideMin = false;
+    m_ElevatorSubsystem.setElevatorSpeed(0);
+  }
 
   // Returns true when the command should end.
   @Override

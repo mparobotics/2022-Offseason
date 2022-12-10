@@ -5,27 +5,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevatorHigh extends CommandBase {
-  private final ElevatorSubsystem m_elevatorSubsystem;
-   /** Command to move the elevator to the highest height. Only used with the PID Controller */
-  public ElevatorHigh(ElevatorSubsystem elevatorSubsystem) {
+public class ElevatorReset extends CommandBase {
+  private final ElevatorSubsystem m_ElevatorSubsystem;
+  /** Creates a new ElevatorReset. */
+  public ElevatorReset(ElevatorSubsystem elevSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_elevatorSubsystem = elevatorSubsystem;
-    addRequirements(elevatorSubsystem);
+    m_ElevatorSubsystem = elevSub;
+    addRequirements(elevSub);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_ElevatorSubsystem.encoderReset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  m_elevatorSubsystem.elevatorMotionControl(Constants.ELEVATORHIGH);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

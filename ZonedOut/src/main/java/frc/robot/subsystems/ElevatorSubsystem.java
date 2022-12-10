@@ -15,7 +15,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  /** Creates a new elevatorSubsystem. */
+  //if the maximum setpoint check should be overridden
+  public boolean overrideMax = false;
+  //if the minimum setpoint check should be overridden
+  public boolean overrideMin = false;
+
+  //the motor to power the elevator
+  private final CANSparkMax elevatorMotor = new CANSparkMax(Constants.ELEVATORMOTOR_ID, MotorType.kBrushless);
+  //an encoder for the elevator motor
+  private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
+
+
+
+
+  //PID Controller
+  private SparkMaxPIDController elevator_pidController = elevatorMotor.getPIDController();
+  //PID values
   public double kP = 5e-5;
   public double kI = 0;
   public double kD = 0;
@@ -32,9 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double m_setPoint;
 
-  private final CANSparkMax elevatorMotor = new CANSparkMax(Constants.ELEVATORMOTOR_ID, MotorType.kBrushless);
-  private RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
-  private SparkMaxPIDController elevator_pidController = elevatorMotor.getPIDController();
+
 
 
   public ElevatorSubsystem() {
@@ -74,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
 
-
+//set elevator velocity using PID
   public void elevatorVelocityControl (double setPointVel){
     m_setPoint = setPointVel;
     elevator_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kVelocity);
@@ -85,9 +98,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Output", elevatorMotor.getAppliedOutput());
   }
 
+  //set elevator position using PID
   public void elevatorMotionControl (double setPointPos){
     m_setPoint = setPointPos;
-    //limit the elevators height so that it's always between the MAX and MIN values
+    //limit the elevator's height so that it's always between the MAX and MIN values
     m_setPoint = Math.min(Math.max(m_setPoint,Constants.MIN_ELEVATOR_SETPOINT),Constants.MAX_ELEVATOR_SETPOINT);
     //update the PID controller
     elevator_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kPosition);
@@ -98,38 +112,68 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Output", elevatorMotor.getAppliedOutput());
   }
 
+
+  //set the elevator to a specific speed (no PID)
+  public void setElevatorSpeed(double Speed){
+    //if the elevator is moving upwards (speed > 0), then if it goes above the max setpoint stop the motor.
+    //this check can be disabled if overrideMax is set to true
+    if(elevatorEncoder.getPosition() > Constants.MAX_ELEVATOR_SETPOINT && Speed > 0 && !overrideMax){
+      elevatorMotor.set(0);
+    }
+    //if the elevator is moving downwards (speed < 0), then if it goes above the min setpoint stop the motor.
+    //this check can be disabled if overrideMin is set to true
+    else if(elevatorEncoder.getPosition() < Constants.MIN_ELEVATOR_SETPOINT && Speed < 0 && !overrideMin){
+      elevatorMotor.set(0);
+    }
+    else{
+      //if the elevator is within the boundaries of the max and min setpoints, then it's ok to set it to the input speed
+      elevatorMotor.set(Speed);
+    }
+  }
+
+  //reset encoder to 0 rotations
+  public void encoderReset(){
+    elevatorEncoder.setPosition(0);
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Claw Encoder", elevatorEncoder.getPosition());
-    double p = SmartDashboard.getNumber("P Gain", 0);
-    double i = SmartDashboard.getNumber("I Gain", 0);
-    double d = SmartDashboard.getNumber("D Gain", 0);
-    double iz = SmartDashboard.getNumber("I Zone", 0);
-    double ff = SmartDashboard.getNumber("Feed Forward", 0);
-    double max = SmartDashboard.getNumber("Max Output", 0);
-    double min = SmartDashboard.getNumber("Min Output", 0);
-    double maxV = SmartDashboard.getNumber("Max Velocity", 0);
-    double minV = SmartDashboard.getNumber("Min Velocity", 0);
-    double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
-    double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
+    //display encoder position value
+    SmartDashboard.putNumber("Elevator Encoder", elevatorEncoder.getPosition());
 
-    // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if((p != kP)) { elevator_pidController.setP(p); kP = p; }
-    if((i != kI)) { elevator_pidController.setI(i); kI = i; }
-    if((d != kD)) { elevator_pidController.setD(d); kD = d; }
-    if((iz != kIz)) { elevator_pidController.setIZone(iz); kIz = iz; }
-    if((ff != kFF)) { elevator_pidController.setFF(ff); kFF = ff; }
-    if((max != kMaxOutput) || (min != kMinOutput)) { 
-      elevator_pidController.setOutputRange(min, max); 
-      kMinOutput = min; kMaxOutput = max;} 
+    //if pid mode is enabled, update the PID Controller
+    if(Constants.ELEVATOR_IS_PID){
+      
+      
+      double p = SmartDashboard.getNumber("P Gain", 0);
+      double i = SmartDashboard.getNumber("I Gain", 0);
+      double d = SmartDashboard.getNumber("D Gain", 0);
+      double iz = SmartDashboard.getNumber("I Zone", 0);
+      double ff = SmartDashboard.getNumber("Feed Forward", 0);
+      double max = SmartDashboard.getNumber("Max Output", 0);
+      double min = SmartDashboard.getNumber("Min Output", 0);
+      double maxV = SmartDashboard.getNumber("Max Velocity", 0);
+      double minV = SmartDashboard.getNumber("Min Velocity", 0);
+      double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
+      double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
 
-    if((maxV != maxVel)) { elevator_pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
-    if((minV != minVel)) { elevator_pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
-    if((maxA != maxAcc)) { elevator_pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
-    if((allE != allowedErr)) { elevator_pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
+      // if PID coefficients on SmartDashboard have changed, write new values to controller
+      if((p != kP)) { elevator_pidController.setP(p); kP = p; }
+      if((i != kI)) { elevator_pidController.setI(i); kI = i; }
+      if((d != kD)) { elevator_pidController.setD(d); kD = d; }
+      if((iz != kIz)) { elevator_pidController.setIZone(iz); kIz = iz; }
+      if((ff != kFF)) { elevator_pidController.setFF(ff); kFF = ff; }
+      if((max != kMaxOutput) || (min != kMinOutput)) { 
+        elevator_pidController.setOutputRange(min, max); 
+        kMinOutput = min; kMaxOutput = max;} 
 
+      if((maxV != maxVel)) { elevator_pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
+      if((minV != minVel)) { elevator_pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
+      if((maxA != maxAcc)) { elevator_pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
+      if((allE != allowedErr)) { elevator_pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
  
+  
+    }
   }
 }
 

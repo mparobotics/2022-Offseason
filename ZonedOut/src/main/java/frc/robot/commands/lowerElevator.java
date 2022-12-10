@@ -9,8 +9,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class lowerElevator extends CommandBase {
-  /** Creates a new raiseElevator. */
+  
   private final ElevatorSubsystem m_elevatorSubsystem;
+  /** Command to lower the elevator - stopped by the minimum elevator height*/
   public lowerElevator(ElevatorSubsystem elevSub) {
     m_elevatorSubsystem = elevSub;
 
@@ -25,12 +26,20 @@ public class lowerElevator extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorSubsystem.elevatorMotionControl(m_elevatorSubsystem.m_setPoint - Constants.ELEVATOR_INCREMENT_AMOUNT);
+    if(Constants.ELEVATOR_IS_PID){
+      m_elevatorSubsystem.elevatorMotionControl(m_elevatorSubsystem.m_setPoint - Constants.ELEVATOR_INCREMENT_AMOUNT);
+    }
+    else{
+      m_elevatorSubsystem.setElevatorSpeed(Constants.ELEVATOR_DOWN_SPEED);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_elevatorSubsystem.setElevatorSpeed(0);
+  }
 
   // Returns true when the command should end.
   @Override

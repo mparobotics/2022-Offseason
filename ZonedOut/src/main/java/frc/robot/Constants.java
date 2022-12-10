@@ -14,24 +14,27 @@ package frc.robot;
  */
 public final class Constants {
 
-    //motor positions for each height - picking up rings, low pillar, medium pillar, high pillar
+    //motor positions for each height - picking up rings, low pillar, medium pillar, high pillar 
+    //the numbers for the elevator hights use a 40:1 gear ratio - only used with PID
+
     public static final double ELEVATORGROUND = 0;//placeholder
     public static final double ELEVATORLOW = 191;//placeholder
     public static final double ELEVATORMID = 407;//placeholder
     public static final double ELEVATORHIGH = 624;//placeholder
 
     //limits to prevent the motor from going too high or too low
-    public static final double MAX_ELEVATOR_SETPOINT = 624;//placeholder
-    public static final double MIN_ELEVATOR_SETPOINT = 0;//placeholder
-    //amount to increment the elevator by when the B or Y buttons are pressed
-    public static final double ELEVATOR_INCREMENT_AMOUNT = 10;
-    //the numbers for the elevator hights use a 40:1 gear ratio
+    public static final double MAX_ELEVATOR_SETPOINT = 173;
+    public static final double MIN_ELEVATOR_SETPOINT = -10;
 
-    //xbox controller
+    //amount to increment the elevator by when the B or Y buttons are pressed - only used with PID
+    public static final double ELEVATOR_INCREMENT_AMOUNT = 10;
+    
+
+    //xbox controller ID
     public static final int CONTROLLER_PORT = 0;
     //box ID
     public static final int BOX_ID = 1;
-    //drive motor IDs\
+    //drive motor IDs
     public static final int MOTOR_FL_ID = 34;
     public static final int MOTOR_BL_ID = 18;
     public static final int MOTOR_FR_ID = 33;
@@ -39,7 +42,18 @@ public final class Constants {
     //elevator motor ID
     public static final int ELEVATORMOTOR_ID = 53;
     //driving speed
-    public static final double DRIVE_SPEED = 0.5;
+    public static final double DRIVE_SPEED = 0.75;
     public static final double TURN_SPEED = 0.5;
+    //elevator speeds
+    public static final double ELEVATOR_UP_SPEED = 0.75;
+    public static final double ELEVATOR_OVERRIDE_SPEED = 0.3;
+    public static final double ELEVATOR_DOWN_SPEED = -0.3;
+
+    //If we decide to use the PID controller just set this to true 
+    public static final boolean ELEVATOR_IS_PID = false;
+
+
+
+    
 
 }

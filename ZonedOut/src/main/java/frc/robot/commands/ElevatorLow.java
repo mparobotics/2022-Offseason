@@ -10,7 +10,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorLow extends CommandBase {
   private final ElevatorSubsystem m_elevatorSubsystem;
-  /** Creates a new ClawOpen. */
+  /** Command to move the elevator to the low pillar height. Only used with the PID Controller */
   public ElevatorLow(ElevatorSubsystem elevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_elevatorSubsystem = elevatorSubsystem;
