@@ -24,7 +24,7 @@ public final class Constants {
 
     //limits to prevent the motor from going too high or too low
     public static final double MAX_ELEVATOR_SETPOINT = 173;
-    public static final double MIN_ELEVATOR_SETPOINT = -10;
+    public static final double MIN_ELEVATOR_SETPOINT = -50;
 
     //amount to increment the elevator by when the B or Y buttons are pressed - only used with PID
     public static final double ELEVATOR_INCREMENT_AMOUNT = 10;
@@ -42,8 +42,8 @@ public final class Constants {
     //elevator motor ID
     public static final int ELEVATORMOTOR_ID = 53;
     //driving speed
-    public static final double DRIVE_SPEED = 0.75;
-    public static final double TURN_SPEED = 0.5;
+    public static final double DRIVE_SPEED = 0.7;
+    public static final double TURN_SPEED = 0.55;
     //elevator speeds
     public static final double ELEVATOR_UP_SPEED = 0.75;
     public static final double ELEVATOR_OVERRIDE_SPEED = 0.3;

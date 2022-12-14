@@ -18,6 +18,7 @@ import frc.robot.commands.ElevatorMid;
 import frc.robot.commands.ElevatorReset;
 
 import frc.robot.commands.OverrideElevatorMax;
+import frc.robot.commands.OverrideElevatorMin;
 import frc.robot.commands.lowerElevator;
 import frc.robot.commands.raiseElevator;
 import frc.robot.subsystems.DriveSubsystem;
@@ -83,7 +84,7 @@ public class RobotContainer {
       //button 2 raises the elevator at a slower speed and overrides the maximum position
       new JoystickButton(box, 2).whenHeld(new OverrideElevatorMax(m_elevatorSubsystem));
       //button 4 lowers the elevator at a slower speed and overrides the minimum position
-      new JoystickButton(box, 4).whenHeld(new OverrideElevatorMax(m_elevatorSubsystem));
+      new JoystickButton(box, 4).whenHeld(new OverrideElevatorMin(m_elevatorSubsystem));
       //button 5 resets the elevator's encoder to 0 rotations
       new JoystickButton(box, 5).whenHeld(new ElevatorReset(m_elevatorSubsystem));
     }
